@@ -1,0 +1,68 @@
+/* =========================================================================
+   Elya Hut (كوخ إيلياء) — design tokens
+   Single source of truth for every colour, texture, font, size and radius.
+   Re-branding = edit this file only. No hex values anywhere else.
+   Every colour below was sampled from the client's own material (see BRIEF.md §Sources).
+   ========================================================================= */
+:root {
+  /* --- brand colours ------------------------------------------------------ */
+  --olive:        #625e2c;  /* logo coffee bean (mid of 3 painted tones), aprons, painted signs */
+  --olive-deep:   #4a471e;  /* solid panels on the "كعك مع شاي" post; bean shadow */
+  --ink:          #3a2b14;  /* dark brown used for every heading + price on their menu posts */
+  --paper:        #e0d5c1;  /* textured paper behind the logo */
+  --paper-deep:   #d7c8b1;  /* darker tone of the same logo paper */
+  --tatreez:      #721820;  /* framed cross-stitch embroidery (video 5) */
+  --tatreez-deep: #560e13;  /* darker stitches of the same embroidery */
+  --butter:       #f4e18e;  /* printed "إبريق شاي" A-frame poster at the gate */
+  --gold:         #bf993f;  /* chipped gold edge of the "كُوخ إيلياء" sign plate */
+  --wood:         #c4924e;  /* hand-painted arrow signposts at the gate */
+  --wood-deep:    #845a3e;  /* stained gate posts */
+  --gingham:      #265238;  /* green check napkins under the pie, ka'ak basket */
+
+  /* --- derived (same hues, alpha only) ----------------------------------- */
+  --rule:         rgba(58, 43, 20, .20);   /* ink @ 20% — hairlines between items */
+  --ink-soft:     rgba(58, 43, 20, .78);   /* ink @ 78% — secondary text: 5.3:1 on paper, 4.8:1 on paper-deep */
+  --shadow:       rgba(58, 43, 20, .18);
+  --wood-grain:   rgba(132, 90, 62, .22);  /* wood-deep @ 22% */
+  --gingham-half: rgba(38, 82, 56, .55);   /* gingham @ 55% — overlaps to full colour */
+  --paper-on-dark: rgba(224, 213, 193, .82);
+
+  /* --- textures (colours live here too, so nothing leaks into other files) */
+  --tex-tatreez: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='22'%3E%3Crect x='0.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='0.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='2.2' y='10.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='4.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='4.2' y='8.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='4.2' y='12.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='4.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='6.2' y='6.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='6.2' y='14.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='8.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='8.2' y='4.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='8.2' y='10.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='8.2' y='16.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='8.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='10.2' y='2.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='10.2' y='8.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='10.2' y='10.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='10.2' y='12.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='10.2' y='18.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='12.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='12.2' y='4.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='12.2' y='10.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='12.2' y='16.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='12.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='14.2' y='6.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='14.2' y='14.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='16.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='16.2' y='8.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='16.2' y='12.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='16.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='18.2' y='10.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='20.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='20.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='24.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='24.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='28.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='28.2' y='6.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='28.2' y='10.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='28.2' y='14.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='28.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='30.2' y='10.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='32.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='32.2' y='6.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='32.2' y='8.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='32.2' y='10.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='32.2' y='12.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='32.2' y='14.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='32.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='34.2' y='10.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='36.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='36.2' y='6.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='36.2' y='10.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='36.2' y='14.2' width='1.6' height='1.6' fill='%23721820'/%3E%3Crect x='36.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='40.2' y='0.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3Crect x='40.2' y='20.2' width='1.6' height='1.6' fill='%23560e13'/%3E%3C/svg%3E");
+  --tex-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .17 0 0 0 0 .08 0 0 0 .3 -.09'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url%28%23g%29'/%3E%3C/svg%3E");
+
+  /* --- type ------------------------------------------------------------- */
+  --font-body:  "Baloo Bhaijaan 2", system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+  --font-callig: "Amiri", "Baloo Bhaijaan 2", Georgia, serif;
+
+  --fs-xs:   .8125rem;  /* 13 */
+  --fs-sm:   .9375rem;  /* 15 */
+  --fs-md:   1.0625rem; /* 17 */
+  --fs-item: 1.1875rem; /* 19 — item names + prices (large-text threshold when bold) */
+  --fs-lg:   1.375rem;  /* 22 */
+  --fs-xl:   2rem;      /* 32 — section titles */
+  --fs-plate: 2.375rem; /* 38 — name on the sign plate */
+
+  /* --- space / size ----------------------------------------------------- */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
+  --gutter: 16px;
+  --page-max: 620px;
+  --tap: 44px;
+  --nav-h: 64px;
+  --thumb: 56px;
+  --band-h: 22px;
+
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-pill: 999px;
+}
+
+@media (min-width: 700px) {
+  :root {
+    --gutter: 24px;
+    --page-max: 680px;
+    --fs-item: 1.25rem;
+    --fs-xl: 2.25rem;
+    --fs-plate: 2.75rem;
+    --thumb: 64px;
+  }
+}
