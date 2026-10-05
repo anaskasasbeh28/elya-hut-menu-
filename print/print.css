@@ -1,0 +1,325 @@
+/* =========================================================================
+   Elya Hut — printed one-page menu (A4, single-sided)
+   Colours/fonts: ../css/tokens.css only. Sizes in mm/pt (print units).
+   .t1  paper   — counter-board classic (closest to the digital menu)
+   .t2  motifs  — heritage motif ground, framed page, signpost section titles
+   .t3  olive   — dark olive sheet, paper type, gold accents
+   ========================================================================= */
+@page { size: A4; margin: 0; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper-deep); }
+h1, h2, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+svg, img { display: block; }
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.sheet {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto;
+  padding: 13mm 15mm 12mm;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* tatreez bands, top + bottom */
+.band {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 5.6mm;
+  background: var(--tex-tatreez) repeat-x center / auto 100%;
+}
+.band--bottom { top: auto; bottom: 0; }
+.frame { display: none; }
+
+/* ---------- header ---------------------------------------------------- */
+.ph {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6mm;
+  text-align: center;
+}
+.ph__logo img { width: 17mm; height: auto; }
+
+.ph__plate {
+  position: relative;
+  padding: .4mm 9mm 1.4mm;
+  background: linear-gradient(172deg, var(--olive) 0%, var(--olive) 55%, var(--olive-deep) 100%);
+  box-shadow: 0 .8mm 0 var(--wood-deep);
+}
+.ph__plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: .8mm solid var(--gold);
+  filter: url(#chipped);
+}
+.ph__plate h1 {
+  font-family: var(--font-callig);
+  font-weight: 700;
+  font-size: 25pt;
+  line-height: 1.5;
+  color: var(--paper);
+}
+.ph__tag {
+  display: flex;
+  gap: 1.6mm;
+  color: var(--ink-soft);
+  font-size: 8.5pt;
+  font-weight: 700;
+}
+
+.note {
+  display: flex;
+  justify-content: center;
+  gap: 1.6mm;
+  margin: 1.8mm 0 0;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 7.5pt;
+  font-weight: 700;
+}
+
+/* ---------- section titles -------------------------------------------- */
+.ps__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.4mm;
+  margin: 2.6mm 0 .8mm;
+  color: var(--olive-deep);
+}
+.ps__words { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.ps__ar { font-family: var(--font-callig); font-weight: 700; font-size: 17pt; line-height: 1.35; }
+.ps__en {
+  margin-top: .4mm;
+  font-size: 6.5pt;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.sprig { width: 11mm; height: 5mm; flex: none; color: var(--olive-deep); }
+:root[dir="rtl"] .sprig--start { transform: scaleX(-1); }
+
+/* ---------- item lists (like their counter boards) -------------------- */
+.cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 11mm;
+}
+.pi {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 3mm;
+  align-items: center;
+  padding: .8mm 0;
+  border-bottom: .25mm solid var(--rule);
+}
+.pi:last-child { border-bottom: 0; }
+.pi__ar { font-weight: 700; font-size: 10.5pt; line-height: 1.25; }
+.pi__en { grid-column: 1; color: var(--ink-soft); font-size: 7pt; font-weight: 500; line-height: 1.25; }
+.pi__price {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  color: var(--olive-deep);
+  font-weight: 800;
+  font-size: 11pt;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- tea & ka'ak combos ---------------------------------------- */
+.combos { margin-top: 1mm; }
+.combos__title { margin-top: 1.6mm; }
+.combos__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7mm;
+  padding-inline-end: 1.6mm;
+}
+.combo {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2mm;
+  padding: 2.6mm 4mm 4.2mm;
+  background: var(--olive-deep);
+  color: var(--paper);
+}
+.combo::after {                 /* offset outline frame (كعك مع شاي post) */
+  content: "";
+  position: absolute;
+  inset-block: 1.6mm -1.6mm;
+  inset-inline: 1.6mm -1.6mm;
+  z-index: -1;
+  border: .35mm solid var(--olive-deep);
+}
+.combo::before {                /* green gingham strip (napkins, ka'ak basket) */
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1.8mm;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(90deg, var(--gingham-half) 50%, transparent 50%),
+    linear-gradient(var(--gingham-half) 50%, transparent 50%);
+  background-size: 1.8mm 1.8mm;
+}
+.combo__ar { font-weight: 800; font-size: 12pt; line-height: 1.3; }
+.combo__sub { font-size: 8pt; line-height: 1.35; color: var(--paper-on-dark); }
+.combo__en { margin-top: .6mm; font-size: 6.8pt; color: var(--paper-on-dark); direction: ltr; text-align: end; }
+:root[dir="rtl"] .combo__en { text-align: right; }
+
+.combo__price {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 22mm;
+  height: 13.5mm;
+  color: var(--butter);
+  line-height: 1;
+}
+.combo__price .oval { position: absolute; inset: 0; width: 100%; height: 100%; }
+.combo__num { font-weight: 800; font-size: 13pt; }
+.combo__cur { margin-top: .4mm; font-weight: 700; font-size: 6.5pt; }
+
+/* ---------- footer ---------------------------------------------------- */
+.pf {
+  margin-top: auto;
+  padding-top: 3mm;
+  border-top: .25mm solid var(--rule);
+  text-align: center;
+  font-size: 8pt;
+  font-weight: 700;
+  line-height: 1.55;
+}
+.pf__line { display: flex; justify-content: center; flex-wrap: wrap; gap: 0 2.4mm; }
+.pf__en { color: var(--ink-soft); font-weight: 500; font-size: 7pt; }
+.pf__contact { gap: 2mm; }
+.pf__num { font-variant-numeric: tabular-nums; }
+.pf__dot { color: var(--ink-soft); }
+.pf__pets { margin-top: .6mm; color: var(--olive-deep); font-weight: 800; font-size: 8.5pt; }
+
+/* =========================================================================
+   #2 — heritage motifs + framed page + wooden signpost titles
+   ========================================================================= */
+.t2 .sheet { background: var(--tex-motifs) 0 0 / 74mm 74mm, var(--paper); padding-top: 15mm; padding-bottom: 14mm; }
+.t2 .band { display: none; }
+.t2 .frame {
+  display: block;
+  position: absolute;
+  inset: 6.5mm;
+  border: .6mm solid var(--olive-deep);
+  outline: .25mm solid var(--olive-deep);
+  outline-offset: -1.7mm;
+  z-index: -1;
+}
+.t2 .frame i {                  /* stitched tatreez diamonds on the corners */
+  position: absolute;
+  width: 5.2mm;
+  height: 5.2mm;
+  background: var(--tatreez);
+  box-shadow: inset 0 0 0 1.1mm var(--tatreez), inset 0 0 0 1.5mm var(--paper);
+  transform: rotate(45deg);
+}
+.t2 .frame i:nth-child(1) { top: -2.9mm; left: -2.9mm; }
+.t2 .frame i:nth-child(2) { top: -2.9mm; right: -2.9mm; }
+.t2 .frame i:nth-child(3) { bottom: -2.9mm; left: -2.9mm; }
+.t2 .frame i:nth-child(4) { bottom: -2.9mm; right: -2.9mm; }
+
+.t2 .ps__title .sprig { display: none; }
+.t2 .ps__words {                /* wooden arrow signs from the gate */
+  position: relative;
+  isolation: isolate;
+  padding: 1.1mm 8mm 1.3mm 5mm;  /* physical: arrow points right like the real signs */
+  color: var(--olive-deep);
+  transform: rotate(-1deg);
+}
+.t2 .col:last-child .ps:nth-child(2) .ps__words,
+.t2 .col:first-child .ps:nth-child(1) .ps__words { transform: rotate(.8deg); }
+.t2 .ps__words::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    repeating-linear-gradient(177deg, transparent 0 1.3mm, var(--wood-grain) 1.3mm 1.55mm, transparent 1.55mm 3.2mm),
+    var(--wood);
+  clip-path: polygon(0 0, calc(100% - 4.2mm) 0, 100% 50%, calc(100% - 4.2mm) 100%, 0 100%);
+}
+.t2 .ps__words::after {         /* nail */
+  content: "";
+  position: absolute;
+  left: 2mm;
+  top: 50%;
+  width: 1.2mm;
+  height: 1.2mm;
+  margin-top: -.6mm;
+  border-radius: 50%;
+  background: var(--wood-deep);
+}
+.t2 .ps__ar { font-family: var(--font-body); font-weight: 800; font-size: 13.5pt; line-height: 1.2; }
+.t2 .ps__en { font-size: 6pt; }
+
+.t2 .combo {
+  background: var(--paper);
+  color: var(--ink);
+  border: .45mm dashed var(--olive-deep);
+}
+.t2 .combo::after { display: none; }
+.t2 .combo__sub, .t2 .combo__en { color: var(--ink-soft); }
+.t2 .combo__price { color: var(--olive-deep); }
+
+/* =========================================================================
+   #3 — olive sheet, paper type, gold accents
+   ========================================================================= */
+.t3 .sheet { background: var(--olive-deep); color: var(--paper); }
+.t3 .band { background-image: var(--tex-tatreez-light); }
+
+.t3 .ph__logo {
+  display: grid;
+  place-items: center;
+  width: 27mm;
+  height: 27mm;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 0 0 .6mm var(--gold), 0 0 0 1.7mm var(--olive-deep), 0 0 0 1.95mm var(--gold);
+}
+.t3 .ph__logo img { width: 16mm; }
+.t3 .ph { gap: 2.6mm; }
+.t3 .ph__plate { background: none; box-shadow: none; padding-inline: 11mm; }
+.t3 .ph__tag, .t3 .note { color: var(--paper-on-dark); }
+
+.t3 .ps__title { color: var(--paper); }
+.t3 .ps__en { color: var(--butter); }
+.t3 .sprig { color: var(--gold); }
+.t3 .pi { border-bottom-color: var(--rule-light); }
+.t3 .pi__en { color: var(--paper-on-dark); }
+.t3 .pi__price { color: var(--butter); }
+
+.t3 .combo { background: var(--paper); color: var(--ink); }
+.t3 .combo::after { border-color: var(--gold); }
+.t3 .combo__sub, .t3 .combo__en { color: var(--ink-soft); }
+.t3 .combo__price { color: var(--olive-deep); }
+
+.t3 .pf { border-top-color: var(--rule-light); }
+.t3 .pf__en, .t3 .pf__dot { color: var(--paper-on-dark); }
+.t3 .pf__pets { color: var(--butter); }
+
+/* #1 has the most free space: give the rows a little more air */
+.t1 .pi { padding-block: 1.05mm; }

@@ -1,0 +1,571 @@
+/* =========================================================================
+   Elya Hut — menu page
+   Colours, fonts, sizes: css/tokens.css only (no hex here).
+   Logical properties throughout; the one deliberate physical exception is the
+   signpost arrow shape, which points right like their real signs at the gate.
+   ========================================================================= */
+
+/* ---------- base -------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: clip;              /* never `hidden`: it would kill the sticky nav */
+  scroll-padding-top: calc(var(--nav-h) + var(--sp-3));
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--tex-grain), var(--tex-motifs) 0 0 / 320px 320px repeat, var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+}
+
+img, svg { display: block; max-width: 100%; }
+h1, h2, h3, p, ul, dl, dd { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--tatreez);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
+
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+html.is-locked { overflow: hidden; }   /* only while the photo popup is open */
+
+.wrap {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.skip {
+  position: absolute;
+  inset-inline-start: var(--sp-3);
+  top: -200px;
+  z-index: 50;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-pill);
+  background: var(--olive-deep);
+  color: var(--paper);
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip:focus { top: var(--sp-3); }
+
+.noscript { padding: var(--sp-5) var(--gutter); text-align: center; font-weight: 700; }
+
+/* ---------- tatreez band (framed cross-stitch, video 5) ------------------ */
+.band {
+  height: var(--band-h);
+  background: var(--tex-tatreez) repeat-x center / auto 100%;
+}
+
+/* ---------- masthead ---------------------------------------------------- */
+.masthead { text-align: center; }
+
+.masthead__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-block: var(--sp-7) var(--sp-5);
+}
+
+.lang {
+  position: absolute;
+  top: var(--sp-3);
+  inset-inline-end: var(--gutter);
+  min-width: var(--tap);
+  min-height: var(--tap);
+  padding-inline: var(--sp-4);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-pill);
+  background: transparent;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  line-height: 1;
+  cursor: pointer;
+}
+.lang:hover { background: var(--paper-deep); }
+
+.masthead__mark {
+  width: 108px;
+  height: auto;
+}
+@media (min-width: 700px) {
+  .masthead__mark { width: 128px; }
+}
+
+/* Sign plate: olive board, cream hand-lettering, chipped gold edge (interior sign) */
+.plate {
+  position: relative;
+  display: inline-block;
+  padding: var(--sp-1) var(--sp-6) var(--sp-2);
+  background: var(--tex-grain), linear-gradient(172deg, var(--olive) 0%, var(--olive) 55%, var(--olive-deep) 100%);
+  box-shadow: 0 3px 0 var(--wood-deep), 0 12px 22px -14px var(--shadow);
+}
+.plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 3px solid var(--gold);
+  filter: url(#chipped);
+  pointer-events: none;
+}
+.plate__name {
+  font-family: var(--font-callig);
+  font-weight: 700;
+  font-size: var(--fs-plate);
+  line-height: 1.55;
+  color: var(--paper);
+}
+:root[lang="en"] .plate__name { line-height: 1.35; padding-block: var(--sp-1); }
+
+.masthead__tag {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .45em;
+  color: var(--ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 36px;
+  padding: var(--sp-1) var(--sp-4);
+  border-radius: var(--r-pill);
+  background: var(--paper-deep);
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+.status[hidden] { display: none; }
+.status__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--olive);
+  box-shadow: 0 0 0 3px var(--rule);
+}
+.status[data-state="closed"] .status__dot { background: var(--tatreez); }
+
+/* ---------- signpost nav (wooden arrows at the gate) -------------------- */
+.signposts {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--tex-grain), var(--paper);
+  border-block: 1px solid var(--rule);
+}
+
+.signposts__list {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--gutter);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+.signposts__list::-webkit-scrollbar { display: none; }
+.signposts__list > li { flex: none; scroll-snap-align: center; padding-block: 2px; }
+/* "safe" centring: centred when everything fits (tablet/desktop), scrollable when it doesn't (phone) */
+.signposts__list > li:first-child { margin-inline-start: auto; }
+.signposts__list > li:last-child  { margin-inline-end: auto; }
+
+.sign {
+  --tilt: -1.2deg;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  height: 46px;
+  /* physical on purpose: the arrow points right in both languages, like the real signs */
+  padding-left: 22px;
+  padding-right: 30px;
+  color: var(--olive-deep);
+  font-weight: 800;
+  font-size: var(--fs-item);     /* 19px bold = large text: olive-deep on wood is 3.4:1 (≥3 required) */
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  transform: rotate(var(--tilt));
+}
+.signposts__list > li:nth-child(2n) .sign { --tilt: 1deg; }
+.signposts__list > li:nth-child(3n) .sign { --tilt: -.5deg; }
+
+.sign::after {                   /* the board itself — clip-path lives here so focus outlines aren't clipped */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    var(--tex-grain),
+    repeating-linear-gradient(177deg, transparent 0 5px, var(--wood-grain) 5px 6px, transparent 6px 13px),
+    var(--wood);
+  clip-path: polygon(0 0, calc(100% - 17px) 0, 100% 50%, calc(100% - 17px) 100%, 0 100%);
+  box-shadow: inset 0 -3px 0 var(--wood-grain);
+}
+.sign::before {                  /* the nail */
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin-top: -2.5px;
+  border-radius: 50%;
+  background: var(--wood-deep);
+}
+.sign[aria-current="true"] { color: var(--paper); }
+.sign[aria-current="true"]::after { background: var(--tex-grain), var(--olive-deep); }
+.sign[aria-current="true"]::before { background: var(--gold); }
+.sign:hover::after { filter: brightness(1.05); }
+
+/* ---------- sections ---------------------------------------------------- */
+.price-note {
+  padding-top: var(--sp-5);
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.section { padding-block: var(--sp-6) var(--sp-2); }
+
+.section__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  font-family: var(--font-callig);
+  font-weight: 700;
+  font-size: var(--fs-xl);
+  line-height: 1.5;
+  color: var(--olive-deep);
+}
+.section__title:focus { outline: none; }
+.section__title:focus-visible { outline: 3px solid var(--tatreez); }
+
+.sprig { width: 58px; height: 26px; flex: none; color: var(--olive-deep); }
+/* sprigs always point outward: the one on the physical right is mirrored */
+:root[dir="rtl"] .sprig--start,
+:root[dir="ltr"] .sprig--end { transform: scaleX(-1); }
+
+/* item rows — like their counter boards: name, price at the end, hairline between */
+.item { border-bottom: 1px solid var(--rule); }
+.item:last-child { border-bottom: 0; }
+
+.item__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  min-height: 56px;
+  padding-block: var(--sp-3);
+}
+
+/* rows with a photo are buttons: tap opens the dish photo */
+.item__row--btn {
+  margin: 0;
+  padding-inline: 0;
+  border: 0;
+  border-radius: var(--r-md);
+  background: none;
+  text-align: start;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.item__row--btn:hover .item__name {
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+.item__row--btn:active { background: var(--rule); }
+
+.item__photo { position: relative; flex: none; }
+.item__zoom {
+  position: absolute;
+  inset-block-end: -5px;
+  inset-inline-end: -5px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--olive-deep);
+  color: var(--paper);
+  box-shadow: 0 0 0 2px var(--paper);
+}
+.item__zoom svg { width: 11px; height: 11px; }
+
+.item__thumb {
+  width: var(--thumb);
+  height: var(--thumb);
+  flex: none;
+  object-fit: cover;
+  border-radius: var(--r-md);
+  box-shadow: 0 0 0 2px var(--paper-deep), 0 6px 12px -8px var(--shadow);
+}
+
+.item__name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 700;
+  font-size: var(--fs-item);
+  line-height: 1.35;
+}
+:root[lang="en"] .item__name { line-height: 1.3; }
+
+.item__price {
+  flex: none;
+  min-width: 3.4ch;
+  text-align: end;
+  color: var(--olive-deep);
+  font-weight: 800;
+  font-size: var(--fs-item);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- "شاي وكعك" offer cards (the كعك مع شاي post + teapot poster) --- */
+.offers {
+  display: grid;
+  gap: var(--sp-6);
+  padding-inline-end: 8px;       /* room for the offset frame */
+  padding-bottom: 8px;
+}
+@media (min-width: 700px) {
+  .offers { grid-template-columns: 1fr 1fr; gap: var(--sp-5); }
+}
+
+.offer {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  background: var(--olive-deep);
+  color: var(--paper);
+}
+.offer::after {                  /* thin outline frame, offset from the panel */
+  content: "";
+  position: absolute;
+  inset-block: 8px -8px;
+  inset-inline: 8px -8px;
+  z-index: -1;
+  border: 1.5px solid var(--olive-deep);
+}
+
+.offer__img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.offer__body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-content: center;
+  align-items: center;
+  gap: var(--sp-1) var(--sp-3);
+  padding: var(--sp-4);
+}
+.offer__name {
+  grid-column: 1;
+  font-weight: 800;
+  font-size: var(--fs-lg);
+  line-height: 1.3;
+}
+.offer__sub {
+  grid-column: 1;
+  color: var(--paper-on-dark);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+
+.offer__price {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+.offer__price,
+.dish__price {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 104px;
+  height: 66px;
+  color: var(--butter);
+  line-height: 1;
+}
+.offer__body--solo .offer__price { grid-row: 1; }
+.offer__price .oval,
+.dish__price .oval { position: absolute; inset: 0; width: 100%; height: 100%; }
+.offer__num, .dish__num { font-weight: 800; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.offer__cur, .dish__cur { margin-top: 2px; font-weight: 700; font-size: var(--fs-xs); }
+
+/* green gingham strip (napkins under the pie, ka'ak basket lining) */
+.offer__gingham,
+.gingham {
+  height: 12px;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(90deg, var(--gingham-half) 50%, transparent 50%),
+    linear-gradient(var(--gingham-half) 50%, transparent 50%);
+  background-size: 12px 12px;
+}
+
+/* ---------- dish photo popup ------------------------------------------- */
+.dish {
+  width: calc(100% - 2 * var(--gutter) - 16px);
+  max-width: 480px;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+  background: var(--olive-deep);
+  color: var(--paper);
+  outline: 1.5px solid var(--paper-on-dark);   /* thin outer frame, echoes the offset frame on the cards */
+  outline-offset: 7px;
+}
+.dish::backdrop {
+  background: var(--backdrop);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dish[open] { animation: dish-in .22s ease-out; }
+  @keyframes dish-in { from { opacity: 0; transform: translateY(14px) scale(.98); } }
+}
+
+.dish__figure { position: relative; }
+.dish__img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  max-height: 62vh;
+  object-fit: cover;
+  background: var(--olive);
+}
+.dish__close {
+  position: absolute;
+  top: var(--sp-3);
+  inset-inline-end: var(--sp-3);
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  border: 0;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 6px 14px -6px var(--shadow);
+  cursor: pointer;
+}
+.dish__close svg { width: 20px; height: 20px; }
+
+.dish__body {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+}
+.dish__name { font-weight: 800; font-size: var(--fs-lg); line-height: 1.3; }
+
+/* ---------- footer ------------------------------------------------------ */
+.foot { margin-top: var(--sp-7); }
+
+.foot__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-block: var(--sp-6) var(--sp-8);
+  text-align: center;
+}
+
+.stamp {                          /* square logo stamp, as on their cups */
+  width: 84px;
+  padding: 10px 12px;
+  border: 2px solid var(--ink);
+  color: var(--ink);
+}
+.stamp svg { width: 100%; height: auto; }
+
+.foot__welcome { max-width: 34ch; color: var(--ink-soft); font-weight: 700; }
+.foot__pets { color: var(--olive-deep); font-weight: 800; }
+
+.foot__info { display: grid; gap: var(--sp-3); }
+.foot__info dt { color: var(--ink-soft); font-size: var(--fs-xs); font-weight: 700; }
+.foot__info dd { font-weight: 700; }
+
+.foot__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  width: 100%;
+  max-width: 440px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: 52px;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  text-decoration: none;
+}
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn:hover { background: var(--paper-deep); }
+
+.btn--primary {
+  grid-column: 1 / -1;
+  border-color: var(--olive-deep);
+  background: var(--olive-deep);
+  color: var(--paper);
+}
+.btn--primary:hover { background: var(--olive); }
+
+.btn__text { display: flex; flex-direction: column; align-items: center; line-height: 1.25; }
+.btn__num {
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  unicode-bidi: isolate;
+}
+
+.foot__social { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-3); }
+.btn--quiet { min-height: var(--tap); border-color: var(--rule); font-size: var(--fs-sm); }
